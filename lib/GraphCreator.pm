@@ -9,20 +9,22 @@ sub createHtmlPageFromData {
     my ($data, $generatedFile) = @_;
 
     my $templateFile = 'resources/index.html';
-    open(F, $templateFile) or die "can't open TEMPLATE file " . $templateFile . ' : ' . $! . "\n";
-    open(O, ">" . $generatedFile) or die "can't open GENERATED file " . $generatedFile . ' : ' . $! . "\n";;
+    my $readFh;
+    my $writeFh;
+    open($readFh, $templateFile) or die "can't open TEMPLATE file " . $templateFile . ' : ' . $! . "\n";
+    open($writeFh, ">" . $generatedFile) or die "can't open GENERATED file " . $generatedFile . ' : ' . $! . "\n";;
 
     while (my $line = <F>) {
         if ($line =~ /^\s*<DATAHERE>\s*$/) {
             print 'injecting values in html page' . "\n";
             my $i = 0;
             for my $value (@$data) {
-                print O '[' . $i++ . ', ' . $value . '],' . "\n";
+                print $writeFh '[' . $i++ . ', ' . $value . '],' . "\n";
 
             }
             print "$i values written \n";
         } else {
-            print O $line;
+            print $writeFh $line;
         }
     }
 
