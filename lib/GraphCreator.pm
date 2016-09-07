@@ -12,7 +12,7 @@ sub createHtmlPageFromData {
     my $readFh;
     my $writeFh;
     open($readFh, $templateFile) or die "can't open TEMPLATE file " . $templateFile . ' : ' . $! . "\n";
-    open($writeFh, ">" . $generatedFile) or die "can't open GENERATED file " . $generatedFile . ' : ' . $! . "\n";;
+    open($writeFh, '>' , $generatedFile) or die "can't open GENERATED file " . $generatedFile . ' : ' . $! . "\n";;
 
     while (my $line = <$readFh>) {
         if ($line =~ /^\s*<DATAHERE>\s*$/) {
