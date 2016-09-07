@@ -6,6 +6,8 @@ use Getopt::Long;
 
 use GraphCreator;
 use Cwd;
+use File::Copy;
+use File::Remove;
 
 my $logfiles = [];
 
@@ -19,8 +21,13 @@ my $dir = cwd;
 
 my $createdFiles = [];
 for my $logfile (@$logfiles) {
-    my $genFile = GraphCreator::createHtmlPageFromLogFile($logfile);
+    my $fileName = $logfile;
+    $fileName =~ s/\//-_-/g;
+    $fileName .= '-tmp';
+    File::Copy::copy($logfile, $fileName);
+    my $genFile = GraphCreator::createHtmlPageFromLogFile($fileName);
     push @$createdFiles, $genFile if $genFile;
+    File::Remove::remove($fileName);
 }
 
 print 'created ' . scalar(@$createdFiles) . ' html graphs : ';
