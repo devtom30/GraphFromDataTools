@@ -30,7 +30,8 @@ sub createHtmlPageFromLogFile {
     my $logfile = shift;
 
     my $data = DataFromLogFile::extractGraphDataFromRelevantLines($logfile);
-    my $generatedFile = time . '_generatedFromData.html';
+    $logfile =~ s/\//-_-/g;
+    my $generatedFile = time . '_generatedFromFile_' . $logfile . '.html';
     if (createHtmlPageFromData($data, $generatedFile)) {
         return $generatedFile;
     } else {
