@@ -15,18 +15,21 @@ ok (scalar(@$lines) > 0);
 
 
 my $line = '[Tue Sep  6 11:35:16 2016][debug2] pid 1724 memory at beginning of _runTask() Collect : 88760';
+my $memoryData = 88760;
 my $lineData = DataFromLogFile::extractDataInLine($line);
 my $lineDataExpected = [
     'Tue Sep  6 11:35:16 2016',
     '1724',
     'beginning Collect',
-    88760
+    $memoryData
 ];
 Test::Deep::cmp_deeply(
     $lineData,
     $lineDataExpected,
     'testing data extracting from a line'
 );
+my $extractedMemoryData = DataFromLogFile::extractGraphDataInLine($line);
+ok ($extractedMemoryData eq $memoryData);
 
 my $data = DataFromLogFile::extractDataFromRelevantLines($file);
 ok (defined $data);
@@ -42,6 +45,10 @@ Test::Deep::cmp_deeply(
     $dataFirstListExpected,
     'test of first list in data'
 );
+
+my $graphData = DataFromLogFile::extractGraphDataFromRelevantLines($file);
+ok ($graphData->[0] eq $dataFirstListExpected->[3]);
+ok (scalar(@$graphData) == scalar(@$data));
 
 done_testing();
 
