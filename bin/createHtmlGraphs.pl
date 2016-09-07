@@ -25,6 +25,7 @@ for my $logfile (@$logfiles) {
     $fileName =~ s/\//-_-/g;
     $fileName .= '-tmp';
     File::Copy::copy($logfile, $fileName);
+    print 'writing html in ' . $fileName . "\n";
     my $genFile = GraphCreator::createHtmlPageFromLogFile($fileName);
     push @$createdFiles, $genFile if $genFile;
     File::Remove::remove($fileName);

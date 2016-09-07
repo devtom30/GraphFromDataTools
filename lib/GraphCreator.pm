@@ -9,8 +9,8 @@ sub createHtmlPageFromData {
     my ($data, $generatedFile) = @_;
 
     my $templateFile = 'resources/index.html';
-    open(F, $templateFile);
-    open(O, ">" . $generatedFile);
+    open(F, $templateFile) or die "can't open TEMPLATE file " . $templateFile . ' : ' . $! . "\n";
+    open(O, ">" . $generatedFile) or die "can't open GENERATED file " . $generatedFile . ' : ' . $! . "\n";;
 
     while (my $line = <F>) {
         if ($line =~ /^\s*<DATAHERE>\s*$/) {
