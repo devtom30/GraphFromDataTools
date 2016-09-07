@@ -14,7 +14,7 @@ sub createHtmlPageFromData {
     open($readFh, $templateFile) or die "can't open TEMPLATE file " . $templateFile . ' : ' . $! . "\n";
     open($writeFh, ">" . $generatedFile) or die "can't open GENERATED file " . $generatedFile . ' : ' . $! . "\n";;
 
-    while (my $line = <F>) {
+    while (my $line = <$readFh>) {
         if ($line =~ /^\s*<DATAHERE>\s*$/) {
             print 'injecting values in html page' . "\n";
             my $i = 0;
