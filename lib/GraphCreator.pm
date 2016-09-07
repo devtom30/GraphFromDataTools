@@ -19,8 +19,8 @@ sub createHtmlPageFromData {
             print 'injecting values in html page' . "\n";
             my $i = 0;
             for my $value (@$data) {
-                print $writeFh '[' . $i++ . ', ' . $value . '],' . "\n";
-
+                print $writeFh '[' . $i . ', ' . $value . '],' . "\n";
+                $i++;
             }
             print "$i values written \n";
         } else {
