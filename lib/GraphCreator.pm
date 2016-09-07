@@ -25,6 +25,7 @@ sub createHtmlPageFromData {
             print "$i values written \n";
         } else {
             print $writeFh $line;
+            print $line;
         }
     }
     close $writeFh;
