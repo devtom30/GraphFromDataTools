@@ -18,6 +18,7 @@ GetOptions(
 exit(1) if scalar(@$logfiles) == 0;
 
 my $dir = cwd;
+print 'Current directory is ' . $dir . "\n";
 
 my $createdFiles = [];
 for my $logfile (@$logfiles) {
