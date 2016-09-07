@@ -18,9 +18,9 @@ sub createHtmlPageFromData {
             my $i = 0;
             for my $value (@$data) {
                 print O '[' . $i++ . ', ' . $value . '],' . "\n";
-                print $i . ' ';
+
             }
-            print "\n";
+            print "$i values written \n";
         } else {
             print O $line;
         }
