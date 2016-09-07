@@ -27,6 +27,8 @@ sub createHtmlPageFromData {
             print $writeFh $line;
         }
     }
+    close $writeFh;
+    close $readFh;
 
     return 1;
 }
