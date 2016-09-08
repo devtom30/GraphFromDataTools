@@ -23,13 +23,13 @@ print 'Current directory is ' . $dir . "\n";
 my $createdFiles = [];
 for my $logfile (@$logfiles) {
     my $fileName = $logfile;
-    $fileName =~ s/\//-_-/g;
-    $fileName .= '-tmp';
-    File::Copy::copy($logfile, $fileName);
+#    $fileName =~ s/\//-_-/g;
+#    $fileName .= '-tmp';
+#    File::Copy::copy($logfile, $fileName);
     print 'writing html in ' . $fileName . "\n";
     my $genFile = GraphCreator::createHtmlPageFromLogFile($fileName);
     push @$createdFiles, $genFile if $genFile;
-    File::Remove::remove($fileName);
+#    File::Remove::remove($fileName);
 }
 
 print 'created ' . scalar(@$createdFiles) . ' html graphs : ';
