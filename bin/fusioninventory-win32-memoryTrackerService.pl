@@ -23,6 +23,7 @@ use Win32;
 use Win32::Daemon;
 use Win32::OLE;
 use Win32::Service;
+use File::Remove;
 
 use GraphCreator;
 
@@ -118,11 +119,15 @@ Win32::Daemon::RegisterCallbacks($callbacks);
 my $controls = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN ;
 Win32::Daemon::AcceptedControls($controls);
 
-my $outputFile = 'memoryReadings.txt';
+my $hashFiles = {};
+for my $file (@$files) {
+    $hashFiles->{$file} = '';
+}
+
 my %context = (
     last_state => SERVICE_STOPPED,
     start_time => time(),
-    outputFile => $outputFile
+    files => $hashFiles
 );
 
 Win32::Daemon::StartService( \%context, SERVICE_SLEEP_TIME);
@@ -140,11 +145,13 @@ sub cb_running {
     my( $event, $context ) = @_;
 
     while ( SERVICE_RUNNING == Win32::Daemon::State() ) {
-        #TODO : before creating a new output fine, delete existing if one exists
         for my $file (@$files) {
+            if ($context->{files->{$file}} && -f $context->{files->{$file}}) {
+                File::Remove::remove($context->{files->{$file}});
+            }
             my $fileName = $file;
             print 'writing html in ' . $fileName . "\n";
-            my $genFile = GraphCreator::createHtmlPageFromLogFile($fileName);
+            my $context->{files->{$file}} = GraphCreator::createHtmlPageFromLogFile($fileName);
             sleep(1);
         }
         sleep(60);
