@@ -10,11 +10,18 @@ sub createHtmlPageFromData {
 
     my $templateFile = 'resources/index.html';
     my $readFh;
-    my $writeFh;
     open($readFh, $templateFile) or die "can't open TEMPLATE file " . $templateFile . ' : ' . $! . "\n";
-    open($writeFh, '>' , $generatedFile) or die "can't open GENERATED file " . $generatedFile . ' : ' . $! . "\n";
+    my @templateCode = ();
+    {
+        local $/;
+        $/ = undef;
+        @templateCode = <$readFh>;
+    }
+    close $readFh;
 
-    while (my $line = <$readFh>) {
+    my $writeFh;
+    open($writeFh, '>' , $generatedFile) or die "can't open GENERATED file " . $generatedFile . ' : ' . $! . "\n";
+    for my $line (@templateCode) {
         if ($line =~ /^\s*<DATAHERE>\s*$/) {
             print 'injecting values in html page' . "\n";
             my $i = 0;
@@ -29,9 +36,22 @@ sub createHtmlPageFromData {
         }
     }
     close $writeFh;
-    close $readFh;
 
     return 1;
+}
+
+sub generateJSCodeFromData {
+    my ($data) = @_;
+
+    my $jsCode = [];
+    my $i = 0;
+    for my $value (@$data) {
+        my $jsValue = '[' . $i . ', ' . $value . '],' . "\n";
+        push @$jsCode, $jsValue;
+        $i++;
+    }
+
+    return $jsCode;
 }
 
 sub createHtmlPageFromLogFile {
