@@ -7,7 +7,7 @@ use Test::Deep;
 use DataFromLogFile;
 
 
-my $file = 't/debug.log';
+my $file = 't/sample-log-file.txt';
 my $lines = DataFromLogFile::extractRelevantLines($file);
 ok (defined $lines);
 ok (ref($lines) eq 'ARRAY');
@@ -35,10 +35,10 @@ my $data = DataFromLogFile::extractDataFromRelevantLines($file);
 ok (defined $data);
 ok (scalar(@$data) > 0);
 my $dataFirstListExpected = [
-    'Tue Sep  6 09:39:21 2016',
-        '1724',
-        'beginning Deploy',
-        77528
+    'Tue Sep  6 10:59:43 2016',
+    '1724',
+    'beginning Deploy',
+    91032
 ];
 Test::Deep::cmp_deeply(
     $data->[0],
