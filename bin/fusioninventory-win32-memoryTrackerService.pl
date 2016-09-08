@@ -140,8 +140,9 @@ sub cb_running {
     my( $event, $context ) = @_;
 
     while ( SERVICE_RUNNING == Win32::Daemon::State() ) {
-        for my $logfile (@$logfiles) {
-            my $fileName = $logfile;
+        #TODO : before creating a new output fine, delete existing if one exists
+        for my $file (@$files) {
+            my $fileName = $file;
             print 'writing html in ' . $fileName . "\n";
             my $genFile = GraphCreator::createHtmlPageFromLogFile($fileName);
             sleep(1);
