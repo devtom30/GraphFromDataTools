@@ -65,7 +65,7 @@ if ($options->{register}) {
         name    => SERVICE_NAME,
         display => SERVICE_DISPLAYNAME,
         path    => "$^X",
-        parameters => "-I$libdir ".File::Spec->rel2abs( __FILE__ ) .' --pids=' . $options->{pids}
+        parameters => "-I$libdir ".File::Spec->rel2abs( __FILE__ ) .' --files=' . $options->{files}
     };
 
     if (!Win32::Daemon::CreateService($service)) {
@@ -102,7 +102,7 @@ if ($options->{register}) {
     exit($ret);
 }
 
-my @pids = split (/,/, $options->{pids});
+my @files = split (/,/, $options->{files});
 
 my $callbacks = {
     start       => \&cb_start,
@@ -122,12 +122,8 @@ my $outputFile = 'memoryReadings.txt';
 my %context = (
     last_state => SERVICE_STOPPED,
     start_time => time(),
-    memoryReadings => [],
     outputFile => $outputFile
 );
-for my $pid (@pids) {
-    $context{$pid} = [];
-}
 
 Win32::Daemon::StartService( \%context, SERVICE_SLEEP_TIME);
 
