@@ -10,23 +10,17 @@ sub createHtmlPageFromData {
 
     my $templateFile = 'resources/index.html';
     my $readFh;
-    open($readFh, $templateFile) or die "can't open TEMPLATE file " . $templateFile . ' : ' . $! . "\n";
-    my @templateCode = ();
-    {
-        local $/;
-        $/ = undef;
-        @templateCode = <$readFh>;
-    }
-    close $readFh;
-
     my $writeFh;
+    open($readFh, $templateFile) or die "can't open TEMPLATE file " . $templateFile . ' : ' . $! . "\n";
     open($writeFh, '>' , $generatedFile) or die "can't open GENERATED file " . $generatedFile . ' : ' . $! . "\n";
-    for my $line (@templateCode) {
-        if ($line =~ /^\s*<DATAHERE>\s*$/) {
+
+    while (my $line = <$readFh>) {
+        if ($line =~ /DATAHERE/) {
             print 'injecting values in html page' . "\n";
             my $i = 0;
             for my $value (@$data) {
                 print $writeFh '[' . $i . ', ' . $value . '],' . "\n";
+                print '[' . $i . ', ' . $value . '],' . "\n";
                 $i++;
             }
             print "$i values written \n";
@@ -36,6 +30,7 @@ sub createHtmlPageFromData {
         }
     }
     close $writeFh;
+    close $readFh;
 
     return 1;
 }
@@ -59,7 +54,7 @@ sub createHtmlPageFromLogFile {
 
     my $data = DataFromLogFile::extractGraphDataFromRelevantLines($logfile);
     print 'extracted ' . ($data ? scalar(@$data) : 'undef') . ' values from ' . $logfile . "\n";
-    $logfile =~ s/\/|\\\\|\\/-_-/g;
+#    $logfile =~ s/\/|\\\\|\\/-_-/g;
     my $generatedFile = time . '_generatedFromFile.html';
     if (createHtmlPageFromData($data, $generatedFile)) {
         return $generatedFile;
