@@ -30,6 +30,8 @@ for my $logfile (@$logfiles) {
     my $genFile = GraphCreator::createHtmlPageFromLogFile($fileName);
     push @$createdFiles, $genFile if $genFile;
 #    File::Remove::remove($fileName);
+    # to avoid same file names (timestamp)
+    sleep(1);
 }
 
 print 'created ' . scalar(@$createdFiles) . ' html graphs : ';
