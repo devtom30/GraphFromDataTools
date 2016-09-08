@@ -60,7 +60,7 @@ sub createHtmlPageFromLogFile {
     my $data = DataFromLogFile::extractGraphDataFromRelevantLines($logfile);
     print 'extracted ' . ($data ? scalar(@$data) : 'undef') . ' values from ' . $logfile . "\n";
     $logfile =~ s/\/|\\\\|\\/-_-/g;
-    my $generatedFile = time . '_generatedFromFile_' . $logfile . '.html';
+    my $generatedFile = time . '_generatedFromFile.html';
     if (createHtmlPageFromData($data, $generatedFile)) {
         return $generatedFile;
     } else {
