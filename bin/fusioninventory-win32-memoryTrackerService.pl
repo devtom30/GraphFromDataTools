@@ -145,13 +145,20 @@ sub cb_running {
     my( $event, $context ) = @_;
 
     while ( SERVICE_RUNNING == Win32::Daemon::State() ) {
+        my $i = 0;
         for my $file (@$files) {
             if ($context->{files->{$file}} && -f $context->{files->{$file}}) {
                 File::Remove::remove($context->{files->{$file}});
             }
             my $fileName = $file;
-            print 'writing html in ' . $fileName . "\n";
-            my $context->{files->{$file}} = GraphCreator::createHtmlPageFromLogFile($fileName);
+            print 'extracting memory readings from ' . $fileName . "\n";
+            my $outputFile = 'fusioninventoryMemoryGraph.html';
+            if ($i > 0) {
+                $outputFile .= '_' . $i;
+            }
+            $context->{files->{$file}} = GraphCreator::createHtmlPageFromLogFile($fileName, $outputFile);
+            print 'wrote html file ' . $context->{files}->{$file} . "\n";
+            $i++;
             sleep(1);
         }
         sleep(60);

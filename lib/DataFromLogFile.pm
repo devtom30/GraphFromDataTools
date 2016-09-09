@@ -28,11 +28,6 @@ sub extractDataInLine {
             $3 . ' ' . $4,
             $5
         ];
-    } else {
-#        print 'line not matching regex';
-#        print "\n";
-#        print $line . "\n";
-        print $! . "\n";
     }
 
     return $list;

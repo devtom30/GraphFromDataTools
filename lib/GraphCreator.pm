@@ -16,17 +16,13 @@ sub createHtmlPageFromData {
 
     while (my $line = <$readFh>) {
         if ($line =~ /DATAHERE/) {
-            print 'injecting values in html page' . "\n";
             my $i = 0;
             for my $value (@$data) {
                 print $writeFh '[' . $i . ', ' . $value . '],' . "\n";
-                print '[' . $i . ', ' . $value . '],' . "\n";
                 $i++;
             }
-            print "$i values written \n";
         } else {
             print $writeFh $line;
-            print $line;
         }
     }
     close $writeFh;
@@ -50,12 +46,10 @@ sub generateJSCodeFromData {
 }
 
 sub createHtmlPageFromLogFile {
-    my $logfile = shift;
+    my ($logfile, $outputFile) = shift;
 
     my $data = DataFromLogFile::extractGraphDataFromRelevantLines($logfile);
-    print 'extracted ' . ($data ? scalar(@$data) : 'undef') . ' values from ' . $logfile . "\n";
-#    $logfile =~ s/\/|\\\\|\\/-_-/g;
-    my $generatedFile = time . '_generatedFromFile.html';
+    my $generatedFile = $outputFile ? $outputFile : time . '_generatedFromFile.html';
     if (createHtmlPageFromData($data, $generatedFile)) {
         return $generatedFile;
     } else {
